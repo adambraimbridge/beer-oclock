@@ -1,5 +1,5 @@
 const axios = require('axios')
-const authenticate = require('../lib/auth')
+const authenticate = require('./lib/auth')
 
 exports.handler = async ({ httpMethod, body }) => {
 	try {
