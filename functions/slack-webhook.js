@@ -1,5 +1,16 @@
 const axios = require('axios')
-const authenticate = require('./lib/auth')
+const querystring = require('querystring')
+
+const authenticate = () => {
+	if (httpMethod !== 'POST') {
+		throw { statusCode: 405, body: 'Method Not Allowed' }
+	}
+	const { token } = querystring.parse(body)
+	const { SLACK_TOKEN } = process.env
+	if (!token || token !== SLACK_TOKEN) {
+		throw { statusCode: 401, body: 'Unauthorized' }
+	}
+}
 
 exports.handler = async ({ httpMethod, body }) => {
 	try {
