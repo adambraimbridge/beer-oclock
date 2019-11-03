@@ -10,6 +10,7 @@ const authenticate = () => {
 	if (!token || token !== SLACK_TOKEN) {
 		throw { statusCode: 401, body: 'Unauthorized' }
 	}
+	console.log('Authentication successful')
 }
 
 exports.handler = async ({ httpMethod, body }) => {
