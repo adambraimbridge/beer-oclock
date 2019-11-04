@@ -1,8 +1,8 @@
-const querystring = require('querystring')
-const axios = require('axios')
+import { parse } from 'querystring'
+import { post } from 'axios'
 
 const sendThankyou = async response_url => {
-	const response = await axios.post(
+	const response = await post(
 		response_url,
 		{
 			replace_original: "true",
@@ -28,9 +28,9 @@ const authenticate = (httpMethod, token) => {
 	console.log('Authentication successful')
 }
 
-exports.handler = async request => {
+export async function handler(request) {
 	const { httpMethod, body } = request
-	const { payload } = querystring.parse(body)
+	const { payload } = parse(body)
 	const { token, response_url } = JSON.parse(payload)
 	try {
 		authenticate(httpMethod, token)

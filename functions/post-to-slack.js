@@ -1,4 +1,4 @@
-const axios = require('axios')
+import { post } from 'axios'
 const blocks = [
 	{
 		type: 'section',
@@ -34,7 +34,7 @@ const blocks = [
 	},
 ]
 
-exports.handler = async request => {
+export async function handler(request) {
 	const { recipient } = request.queryStringParameters
 	if (recipient === undefined) {
 		return {
@@ -44,7 +44,7 @@ exports.handler = async request => {
 		}
 	}
 
-	const response = await axios.post(
+	const response = await post(
 		'https://slack.com/api/chat.postMessage',
 		{
 			channel: recipient,
