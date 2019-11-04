@@ -34,11 +34,20 @@ const blocks = [
 	},
 ]
 
-exports.handler = async () => {
+exports.handler = async request => {
+	const { recipient } = request.queryStringParameters
+	if (recipient === undefined) {
+		return {
+			statusCode: 200,
+			body:
+				'<body style="text-align: center; padding-top: 10rem;"><h1>Is it 🍺⏰?</h1><form><input type="text" style="padding:1rem; text-align: center; width:20rem;" name="recipient" placeholder="Enter a Slack channel ID or user ID" /></form></body>',
+		}
+	}
+
 	const response = await axios.post(
 		'https://slack.com/api/chat.postMessage',
 		{
-			channel: 'CQ3R9PQEQ',
+			channel: recipient,
 			blocks,
 		},
 		{
