@@ -5,6 +5,8 @@
 	</head>
 	<body style="text-align: center; padding: 10rem;">
 		<h1>Is it 🍺⏰?</h1>
-		<button id="find-out">Find out</button>
+		<form action="/.netlify/functions/post-to-slack">
+			<input type="text" style="padding:1rem; text-align: center; width:20rem;" name="recipient" placeholder="Enter a Slack channel ID or user ID" />
+		</form>
 	</body>
 </html>

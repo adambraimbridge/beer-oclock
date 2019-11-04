@@ -1,4 +1,20 @@
 const querystring = require('querystring')
+const axios = require('axios')
+
+const sendThankyou = async response_url => {
+	const response = await axios.post(
+		response_url,
+		{
+			replace_original: "true",
+			text: "Cheers 🍻",				
+			headers: {
+				'content-type': 'application/json',
+				Authorization: `Bearer ${process.env.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN}`,
+			},
+		}
+	)
+	return response
+}
 
 const authenticate = (httpMethod, token) => {
 	// console.log(token)
@@ -13,16 +29,15 @@ const authenticate = (httpMethod, token) => {
 }
 
 exports.handler = async request => {
-	// console.log({ request })
-
 	const { httpMethod, body } = request
 	const { payload } = querystring.parse(body)
 	const { token, response_url } = JSON.parse(payload)
-
-	console.log(JSON.parse(payload))
-
 	try {
 		authenticate(httpMethod, token)
+
+		const response = await sendThankyou(response_url) 
+		console.log(response.data)
+
 		return {
 			statusCode: 200,
 			body: 'Cheers 🍻',
@@ -41,6 +56,7 @@ exports.handler = async request => {
 		console.error({
 			statusCode,
 			body,
+			error,
 		})
 
 		return {

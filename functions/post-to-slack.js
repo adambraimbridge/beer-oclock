@@ -48,6 +48,7 @@ exports.handler = async request => {
 		'https://slack.com/api/chat.postMessage',
 		{
 			channel: recipient,
+			text: 'Is it 🍺⏰?',
 			blocks,
 		},
 		{
