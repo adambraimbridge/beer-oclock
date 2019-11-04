@@ -1,43 +1,51 @@
 const querystring = require('querystring')
-const axios = require('axios')
 
 const authenticate = (httpMethod, token) => {
+	// console.log(token)
 	if (httpMethod !== 'POST') {
-		throw new Error({ statusCode: 405, body: 'Method Not Allowed' })
+		throw new Error('405')
 	}
 	const { SLACK_TOKEN } = process.env
 	if (!token || token !== SLACK_TOKEN) {
-		throw new Error({ statusCode: 401, body: 'Unauthorized' })
+		throw new Error('401')
 	}
 	console.log('Authentication successful')
 }
 
 exports.handler = async request => {
-	console.log({ request })
-	console.log(request)
+	// console.log({ request })
+
 	const { httpMethod, body } = request
-	const { token } = querystring.parse(body)
+	const { payload } = querystring.parse(body)
+	const { token, response_url } = JSON.parse(payload)
+
+	console.log(JSON.parse(payload))
+
 	try {
 		authenticate(httpMethod, token)
-		// await axios.post(
-		// 	response_url,
-		// 	{
-		// 		response_type: 'in_channel',
-		// 		text,
-		// 	},
-		// 	{
-		// 		headers: { 'content-type': 'application/json' },
-		// 	}
-		// )
-		// return {
-		// 	statusCode: 200,
-		// }
-	} catch (error) {
-		console.error(error)
 		return {
-			// throw new Error({ statusCode: 405, body: 'Method Not Allowed' })
-			// statusCode: 422, // Unprocessable Entity
-			// body: error.message,
+			statusCode: 200,
+			body: 'Cheers 🍻',
+		}
+	} catch (error) {
+		const statusCode = (!!error.message && parseInt(error.message)) || 422
+		const body =
+			statusCode === 401
+				? 'Unauthorized'
+				: statusCode === 405
+				? 'Method Not Allowed'
+				: statusCode === 422
+				? 'Unprocessable Entity'
+				: 'Unknown error'
+
+		console.error({
+			statusCode,
+			body,
+		})
+
+		return {
+			statusCode,
+			body,
 		}
 	}
 }
