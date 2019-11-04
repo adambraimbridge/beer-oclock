@@ -1,4 +1,4 @@
 [build]
-  # Directory with the serverless Lambda functions to deploy to AWS.
-  functions = "./functions/"
-	command = "npm build"
+	command = "yarn run build"
+	functions = "functions"
+	environment = { AWS_LAMBDA_JS_RUNTIME = "nodejs10.x" }
