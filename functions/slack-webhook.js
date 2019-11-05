@@ -1,12 +1,20 @@
 const querystring = require('querystring')
 const axios = require('axios')
 
-const sendThankyou = async response_url => {
+const sendThankyou = async (response_url, choice) => {
+
+	let text
+	if (choice === 'yes') {
+		text = "Cheers 🍻"
+	} else if (choice === 'no') {
+		text = "Beached as bru 🐳"
+	}
+
 	const response = await axios.post(
 		response_url,
 		{
 			replace_original: "true",
-			text: "Cheers 🍻",				
+			text,
 			headers: {
 				'content-type': 'application/json',
 				Authorization: `Bearer ${process.env.SLACK_BOT_USER_OAUTH_ACCESS_TOKEN}`,
@@ -31,11 +39,13 @@ const authenticate = (httpMethod, token) => {
 exports.handler = async request => {
 	const { httpMethod, body } = request
 	const { payload } = querystring.parse(body)
-	const { token, response_url } = JSON.parse(payload)
+	const { token, response_url, actions } = JSON.parse(payload)
+	
 	try {
 		authenticate(httpMethod, token)
 
-		const response = await sendThankyou(response_url) 
+		const choice = actions[0].value
+		const response = await sendThankyou(response_url, choice) 
 		console.log(response.data)
 
 		return {

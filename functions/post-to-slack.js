@@ -18,7 +18,7 @@ const blocks = [
 					text: "Let's go",
 				},
 				style: 'primary',
-				value: 'click_me_123',
+				value: 'yes',
 			},
 			{
 				type: 'button',
@@ -28,7 +28,7 @@ const blocks = [
 					text: 'Not yet',
 				},
 				style: 'danger',
-				value: 'click_me_123',
+				value: 'no',
 			},
 		],
 	},
